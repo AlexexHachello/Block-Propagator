@@ -1,0 +1,7 @@
+name = "BlockPropagator"
+uuid = "805446a8-d5aa-40d3-8619-314764745605"
+authors = ["alexey.nikolaev <alexey.nikolaev@engee.cloud>"]
+version = "0.1.0"
+
+[deps]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
