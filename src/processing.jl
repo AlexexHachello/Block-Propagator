@@ -1,4 +1,7 @@
-function find_system(root, path_to_block)
+"""
+Находит в модели `root` подсистему по заданному пути `path_to_block`
+"""
+function _find_system(root, path_to_block)
     popfirst!(path_to_block)
     system = root.system
     for name in path_to_block
@@ -8,10 +11,14 @@ function find_system(root, path_to_block)
     return system
 end
 
+
+"""
+Добавляет в модель `root` блок по полному имени `block_full_name`
+"""
 function add_block!(root, block_full_name)
     path_to_block = split(block_full_name, "/")
     block_name = pop!(path_to_block)
-    system = find_system(root, path_to_block)
+    system = _find_system(root, path_to_block)
     push!(system.blocks, 
         Block(
             block_name,
@@ -22,10 +29,13 @@ function add_block!(root, block_full_name)
     )
 end
 
+"""
+Удаляет из модели `root` блок по полному имени `block_full_name`
+"""
 function rm_block!(root, block_full_name)
     path_to_block = split(block_full_name, "/")
     block_name = pop!(path_to_block)
-    system = find_system(root, path_to_block)
+    system = _find_system(root, path_to_block)
     block_ind = findfirst(b -> b.name == block_name, system.blocks)
     deleteat!(system.blocks, block_ind)
 end
