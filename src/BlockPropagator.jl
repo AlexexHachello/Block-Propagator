@@ -9,7 +9,8 @@ export
 export
     add_block!,
     rm_block!,
-    add_connection!
+    add_connection!,
+    rm_connection!
 
 include("main_structures.jl")
 include("processing.jl")
