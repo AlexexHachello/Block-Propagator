@@ -39,7 +39,7 @@ function rm_block!(root::Root, block::String)
     system = _find_system(root.system, path_to_block)
 
     block_ind = findfirst(b -> b.name == block_name, system.blocks)
-    
+
     deleteat!(system.blocks, block_ind)
 end
 
@@ -74,7 +74,7 @@ function add_connection!(root::Root; outward::String, inward::String)
     outward_port = Port(
         outward_port_name,
         length(outward_block.ports) + 1,
-        false,
+        true,
         false,
         Port[],
     )
@@ -82,7 +82,7 @@ function add_connection!(root::Root; outward::String, inward::String)
     inward_port = Port(
         inward_port_name,
         length(inward_block.ports) + 1,
-        false,
+        true,
         true,
         [outward_port],
     )
