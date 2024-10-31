@@ -7,7 +7,8 @@ export
     Root
 
 export
-    add_block!
+    add_block!,
+    rm_block!
 
 include("main_structures.jl")
 include("processing.jl")
