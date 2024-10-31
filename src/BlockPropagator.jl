@@ -8,7 +8,8 @@ export
 
 export
     add_block!,
-    rm_block!
+    rm_block!,
+    add_connection!
 
 include("main_structures.jl")
 include("processing.jl")
