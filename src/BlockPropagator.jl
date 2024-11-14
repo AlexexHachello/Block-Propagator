@@ -1,5 +1,7 @@
 module BlockPropagator
 
+using Graphs
+
 export
     Port,
     Block,

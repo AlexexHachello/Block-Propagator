@@ -90,6 +90,26 @@ end
 
 
 """
+    Структура представления соединений модели `Connections`
+    - `graph`       -- граф компонентов системы
+    - `block_names` -- упорядоченных вектор имён блоков
+"""
+struct Connections
+    graph::Graph
+    block_names::Vector{String}
+
+    function Connections(;
+        graph::Graph=Graph(),
+        block_names::Vector{String}=String[],
+    )
+        new(
+            graph,
+            block_names,
+        )
+    end
+end
+
+"""
     Структура представления модели `Root`
     - `name`        -- имя модели
     - `sample_rate` -- частота дискретезации
@@ -99,16 +119,19 @@ struct Root
     name::String
     sample_rate::Number
     system::System
+    connections::Connections
 
     function Root(;
         name::String,
         sample_rate::Number,
         system::System,
+        connections::Connections=Connections(),
     )
         new(
             name,
             sample_rate,
-            system
+            system,
+            connections
         )
     end
 end

@@ -64,4 +64,17 @@
     
     @test isempty(root.system.blocks[1].blocks[2].ports)
     @test isempty(root.system.blocks[1].blocks[3].ports)
+
+    rm_block!(root, "/System-1/Block-1")
+    rm_block!(root, "/System-1/Block-2")
+
+    add_block!(root, "/System-1/Source")
+    add_block!(root, "/System-1/Variable Inputs")
+    add_block!(root, "/System-1/State")
+    add_block!(root, "/System-1/Sink")
+
+    add_connection!(root, outward="/System-1/Source/Port-1", inward="/System-1/Variable Inputs/Port-1")
+    add_connection!(root, outward="/System-1/State/Port-1", inward="/System-1/Variable Inputs/Port-2")
+    add_connection!(root, outward="/System-1/Variable Inputs/Port-3", inward="/System-1/State/Port-2")
+    add_connection!(root, outward="/System-1/Variable Inputs/Port-3", inward="/System-1/Sink/Port-1")
 end
