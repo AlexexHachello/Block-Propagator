@@ -114,6 +114,7 @@ end
     - `name`        -- имя модели
     - `sample_rate` -- частота дискретезации
     - `system`      -- корневая система
+    - `connections` -- информация о соединениях в модели
 """
 struct Root
     name::String
