@@ -3,7 +3,7 @@ module BlockPropagator
 export
     Port,
     Block,
-    System, 
+    System,
     Root
 
 export

@@ -16,15 +16,14 @@ end
 """
 function add_block!(root::Root, block::String)
     path_to_block = split(block, "/")
-    block_name = pop!(path_to_block)
+    block_name = pop!(path_to_block) |> string
     system = _find_system(root.system, path_to_block)
 
     push!(system.blocks,
         Block(
-            block_name,
-            length(system.blocks) + 1,
-            "BlockType",
-            Port[],
+            name=block_name,
+            number=length(system.blocks) + 1,
+            type="BlockType",
         )
     )
 end
@@ -35,7 +34,7 @@ end
 """
 function rm_block!(root::Root, block::String)
     path_to_block = split(block, "/")
-    block_name = pop!(path_to_block)
+    block_name = pop!(path_to_block) |> string
     system = _find_system(root.system, path_to_block)
 
     block_ind = findfirst(b -> b.name == block_name, system.blocks)
@@ -48,8 +47,8 @@ end
 Находит в системе `system` блоки по путям `path_to_outward` и `path_to_inward`
 """
 function _find_out_in_blocks(system::System, path_to_outward, path_to_inward)
-    outward_block_name = pop!(path_to_outward)
-    inward_block_name = pop!(path_to_inward)
+    outward_block_name = pop!(path_to_outward) |> string
+    inward_block_name = pop!(path_to_inward) |> string
     system = _find_system(system, path_to_outward)
 
     outward_ind = findfirst(b -> b.name == outward_block_name, system.blocks)
@@ -64,27 +63,26 @@ end
 """
 function add_connection!(root::Root; outward::String, inward::String)
     path_to_outward = split(outward, "/")
-    outward_port_name = pop!(path_to_outward)
+    outward_port_name = pop!(path_to_outward) |> string
     path_to_inward = split(inward, "/")
-    inward_port_name = pop!(path_to_inward)
+    inward_port_name = pop!(path_to_inward) |> string
 
     outward_block, inward_block = _find_out_in_blocks(
         root.system, path_to_outward, path_to_inward)
 
     outward_port = Port(
-        outward_port_name,
-        length(outward_block.ports) + 1,
-        true,
-        false,
-        Port[],
+        name=outward_port_name,
+        number=length(outward_block.ports) + 1,
+        feedthrough=true,
+        inward=false,
     )
 
     inward_port = Port(
-        inward_port_name,
-        length(inward_block.ports) + 1,
-        true,
-        true,
-        [outward_port],
+        name=inward_port_name,
+        number=length(inward_block.ports) + 1,
+        feedthrough=true,
+        inward=true,
+        connected_with=[outward_port],
     )
     
     push!(outward_port.connected_with, inward_port)
@@ -98,9 +96,9 @@ end
 """
 function rm_connection!(root::Root; outward::String, inward::String)
     path_to_outward = split(outward, "/")
-    outward_port_name = pop!(path_to_outward)
+    outward_port_name = pop!(path_to_outward) |> string
     path_to_inward = split(inward, "/")
-    inward_port_name = pop!(path_to_inward)
+    inward_port_name = pop!(path_to_inward) |> string
 
     outward_block, inward_block = _find_out_in_blocks(
         root.system, path_to_outward, path_to_inward)

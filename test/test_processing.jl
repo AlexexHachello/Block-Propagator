@@ -1,27 +1,35 @@
 @testset "Processing" begin
     system_2 = System(
-        "System-2",
-        1,
-        true,
-        Block[]
+        name="System-2",
+        number=1,
+        atomic=true
     )
     system_1 = System(
-        "System-1",
-        1,
-        true,
-        [system_2]
+        name="System-1",
+        number=1,
+        atomic=false
     )
+    push!(system_1.blocks, system_2)
     root_system = System(
-        "Root System",
-        1,
-        true,
-        [system_1]
+        name="Root System",
+        number=1,
+        atomic=false
     )
+    push!(root_system.blocks, system_1)
     root = Root(
-        "Root",
-        0.1,
-        root_system
+        name="Root",
+        sample_rate=0.1,
+        system=root_system
     )
+
+    @test system_1.name == "System-1"
+    @test system_1.number == 1
+    @test system_1.atomic == false
+    @test system_1.blocks == [system_2]
+
+    @test root.name == "Root"
+    @test root.sample_rate == 0.1
+    @test root.system == root_system
 
     add_block!(root, "/System-1/System-2/Block-1")
     block_1 = root.system.blocks[1].blocks[1].blocks[1]
