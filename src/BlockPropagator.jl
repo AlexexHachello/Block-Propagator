@@ -12,9 +12,13 @@ export
     add_block!,
     rm_block!,
     add_connection!,
-    rm_connection!
+    rm_connection!,
+    algebraic_loop_validator
 
 include("main_structures.jl")
 include("processing.jl")
+include("algebraic_loop_validator.jl")
+include("errors.jl")
+using .Errors
 
 end # module BlockPropagator

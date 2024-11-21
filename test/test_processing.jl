@@ -75,6 +75,12 @@
 
     add_connection!(root, outward="/System-1/Source/Port-1", inward="/System-1/Variable Inputs/Port-1")
     add_connection!(root, outward="/System-1/State/Port-1", inward="/System-1/Variable Inputs/Port-2")
-    add_connection!(root, outward="/System-1/Variable Inputs/Port-3", inward="/System-1/State/Port-2")
     add_connection!(root, outward="/System-1/Variable Inputs/Port-3", inward="/System-1/Sink/Port-1")
+
+    @test algebraic_loop_validator(root) |> isnothing
+
+    add_connection!(root, outward="/System-1/Variable Inputs/Port-3", inward="/System-1/State/Port-2")
+
+    expected_msg = "Algebraic loops decected for blocks: [`/System-1/Variable Inputs`, `/System-1/State`]."
+    @test_throws ValidationError(expected_msg) algebraic_loop_validator(root)
 end

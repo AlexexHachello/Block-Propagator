@@ -111,6 +111,7 @@ function add_connection!(root::Root; outward::String, inward::String)
     outward_block_ind = findfirst(bn -> bn == outward_block_name, root.connections.block_names)
     inward_block_ind = findfirst(bn -> bn == inward_block_name, root.connections.block_names)
 
+    inward_port.feedthrough || return
     add_edge!(root.connections.graph, outward_block_ind, inward_block_ind)
 end
 

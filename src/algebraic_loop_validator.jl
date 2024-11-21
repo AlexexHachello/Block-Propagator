@@ -1,20 +1,18 @@
 """
-Находит в системе `system` подсистему по заданному пути `path`
-"""
-# function _find_system(system::System, path)
-#     popfirst!(path)
-#     for name in path
-#         system_ind = findfirst(b -> b.name == name, system.blocks)
-#         system = system.blocks[system_ind]
-#     end
-#     return system
-# end
-
-
-"""
 Проверяет модель `root` на наличие алгебраических петель
 """
 function algebraic_loop_validator(root::Root)
-    println(rool.graph_struct.graph)
-    
+    block_names = root.connections.block_names
+    strong_components = strongly_connected_components_tarjan(root.connections.graph)
+   
+    length(strong_components) == length(block_names) && return
+
+    message = "Algebraic loops decected for blocks: "
+    for comps in strong_components
+        length(comps) == 1 && continue
+        message *= string([block_names[c] for c in comps]) * ", "
+    end
+    message = replace(chop(message, head=0, tail=2), "\"" => "`") * "."
+
+    throw(ValidationError(message))
 end

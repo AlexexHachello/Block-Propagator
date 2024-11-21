@@ -95,11 +95,11 @@ end
     - `block_names` -- упорядоченных вектор имён блоков
 """
 struct Connections
-    graph::Graph
+    graph::DiGraph
     block_names::Vector{String}
 
     function Connections(;
-        graph::Graph=Graph(),
+        graph::DiGraph=DiGraph(),
         block_names::Vector{String}=String[],
     )
         new(
