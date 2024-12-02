@@ -6,4 +6,4 @@ struct ValidationError <: Exception
     message::String
 end
 
-end # module Errors 
+end # module Errors

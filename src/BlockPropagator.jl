@@ -16,7 +16,7 @@ export
     algebraic_loop_validator
 
 include("main_structures.jl")
-include("processing.jl")
+include("model_creator.jl")
 include("algebraic_loop_validator.jl")
 include("errors.jl")
 using .Errors

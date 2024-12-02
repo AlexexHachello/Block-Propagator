@@ -1,10 +1,84 @@
 """
+    Структура представления частоты дискретезации `SampleTime`
+    - `sample_time` -- частота дискретезации
+    - `offset`      -- сдвиг
+"""
+struct SampleTime
+    sample_time::Float64
+    offset::Float64
+
+    function SampleTime(;
+        sample_time::Float64=-1.0,
+        offset::Float64=-1.0,
+    )
+        offset > sample_time && throw(
+            ValidationError("Offset can not be greater than sample time.")
+        )
+
+        new(
+            sample_time,
+            offset,
+        )
+    end
+end
+
+
+"""
+    Структура представления типа данных сигнал `SignalDataType`
+    - `data_type` -- тип данных
+    - `complex`   -- есть ли мнимая часть
+"""
+struct SignalDataType
+    data_type::DataType
+    complex::Bool
+
+    function SignalDataType(;
+        data_type::DataType=Nothing,
+        complex::Bool=false,
+    )
+        new(
+            data_type,
+            complex,
+        )
+    end
+end
+
+
+"""
+    Структура представления атрибутов сигнала `SignalAttributes`
+    - `sample_time` -- частота дискретезации
+    - `propagated`  -- получены ли атрибуты сигнала
+"""
+struct SignalAttributes
+    sample_time::SampleTime
+    dimension::Tuple
+    type::SignalDataType
+    propagated::Bool
+
+    function SignalAttributes(;
+        sample_time::SampleTime=SampleTime(),
+        dimension::Tuple=(),
+        type::SignalDataType=SignalDataType(),
+        propagated::Bool=false,
+    )
+        new(
+            sample_time,
+            dimension,
+            type,
+            propagated,
+        )
+    end
+end
+
+
+"""
     Структура представления порта `Port`
-    - `name`           -- имя порта
-    - `number`         -- порядковый номер порта
-    - `feedthrough`    -- может ли сигнал проходить насквозь
-    - `inward`         -- для входных портов = true, для выходных = false 
-    - `connected_with` -- вектор из портов, с которыми соединён порт
+    - `name`              -- имя порта
+    - `number`            -- порядковый номер порта
+    - `feedthrough`       -- может ли сигнал проходить насквозь
+    - `inward`            -- для входных портов = true, для выходных = false 
+    - `connected_with`    -- вектор из портов, с которыми соединён порт
+    - `signal_attributes` -- атрибуты сигнала
 """
 struct Port
     name::String
@@ -12,13 +86,15 @@ struct Port
     feedthrough::Bool
     inward::Bool
     connected_with::Vector{Port}
+    signal_attributes::SignalAttributes
 
     function Port(;
         name::String,
         number::Int64,
         feedthrough::Bool,
         inward::Bool,
-        connected_with::Vector{Port}=Port[],        
+        connected_with::Vector{Port}=Port[],
+        signal_attributes::SignalAttributes=SignalAttributes(),
     )
         new(
             name,
@@ -26,6 +102,7 @@ struct Port
             feedthrough,
             inward,
             connected_with,
+            signal_attributes,
         )
     end
 end
