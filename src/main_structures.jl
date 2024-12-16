@@ -80,7 +80,7 @@ end
     - `connected_with`    -- вектор из портов, с которыми соединён порт
     - `signal_attributes` -- атрибуты сигнала
 """
-struct Port
+mutable struct Port
     name::String
     number::Int64
     feedthrough::Bool

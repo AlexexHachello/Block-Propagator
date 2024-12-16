@@ -83,4 +83,43 @@
 
     expected_msg = "Algebraic loops decected for blocks: [`/System-1/Variable Inputs`, `/System-1/State`]."
     @test_throws ValidationError(expected_msg) algebraic_loop_validator(root)
+
+    var_inp = root.system.blocks[1].blocks[3]
+    propagate_signal_attributes_block!(var_inp)
+
+    sig_attr = SignalAttributes(sample_time=SampleTime(sample_time=0.1, offset=0.0), propagated=true)
+    var_inp.ports[1].signal_attributes = sig_attr
+
+    @test var_inp.ports[1].signal_attributes.sample_time == SampleTime(sample_time=0.1, offset=0.0)
+    @test var_inp.ports[1].signal_attributes.dimension == ()
+    @test var_inp.ports[1].signal_attributes.type == SignalDataType()
+    @test var_inp.ports[1].signal_attributes.propagated == true
+
+    expected_msg = "Different sample time for Inports in `Variable Inputs`"
+    @test_throws ValidationError(expected_msg) propagate_signal_attributes_block!(var_inp)
+
+    var_inp.ports[2].signal_attributes = sig_attr
+    
+    propagate_signal_attributes_block!(var_inp)
+
+    @test var_inp.ports[3].signal_attributes == sig_attr
+    @test root.system.blocks[1].blocks[5].ports[1].signal_attributes == sig_attr
+    @test root.system.blocks[1].blocks[4].ports[2].signal_attributes == sig_attr
+
+    add_block!(root, "/System-1/Block-3")
+    add_connection!(root, outward="/System-1/Variable Inputs/Port-4", inward="/System-1/Block-3/Port-1")
+
+    var_inp.ports[1].signal_attributes = SignalAttributes()
+    var_inp.ports[2].signal_attributes = SignalAttributes()
+
+    expected_msg = "Different sample time for Outports in `Variable Inputs`"
+    @test_throws ValidationError(expected_msg) propagate_signal_attributes_block!(var_inp, forward=false)
+
+    var_inp.ports[4].signal_attributes = sig_attr
+    propagate_signal_attributes_block!(var_inp, forward=false)
+    
+    @test var_inp.ports[1].signal_attributes == sig_attr
+    @test var_inp.ports[2].signal_attributes == sig_attr
+    @test root.system.blocks[1].blocks[2].ports[1].signal_attributes == sig_attr
+    @test root.system.blocks[1].blocks[4].ports[1].signal_attributes == sig_attr
 end
